@@ -2,21 +2,21 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/yourusername/mind-reader.git'  // Your main repo URL
+        REPO_URL = 'https://github.com/AydinCY/mind-reader.git'  // Your main repo URL
+        CREDENTIALS_ID = 'github-credentials' // This is the ID of the credentials you created
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clone the mind-reader repository
-                git branch: 'main', url: "${REPO_URL}"
+                // Clone the mind-reader repository using the configured credentials
+                git branch: 'main', url: "${REPO_URL}", credentialsId: "${CREDENTIALS_ID}"
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Use PowerShell for Windows, instead of 'sh' for Linux/macOS
                     powershell 'docker build -t mind-reader .'
                 }
             }
@@ -34,7 +34,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Use PowerShell for Windows, instead of 'sh' for Linux/macOS
                     powershell 'docker run -d -p 8080:80 mind-reader'
                 }
             }
