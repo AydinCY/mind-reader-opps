@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/AydinCY/mind-reader.git'  // Your main repo URL
+        REPO_URL = 'https://github.com/yourusername/mind-reader.git'  // Your main repo URL
     }
 
     stages {
@@ -16,8 +16,8 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image for the app
-                    sh 'docker build -t mind-reader .'
+                    // Use PowerShell for Windows, instead of 'sh' for Linux/macOS
+                    powershell 'docker build -t mind-reader .'
                 }
             }
         }
@@ -34,8 +34,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Deploy the app (this example runs the container)
-                    sh 'docker run -d -p 8080:80 mind-reader'
+                    // Use PowerShell for Windows, instead of 'sh' for Linux/macOS
+                    powershell 'docker run -d -p 8080:80 mind-reader'
                 }
             }
         }
