@@ -34,7 +34,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    powershell 'docker run -d -p 8080:80 mind-reader'
+                    powershell 'docker run -d -p 8081:80 mind-reader'
                 }
             }
         }
