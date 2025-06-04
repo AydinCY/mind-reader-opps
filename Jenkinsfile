@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         REPO_URL = 'https://github.com/AydinCY/mind-reader.git'  // Your main repo URL
-        CREDENTIALS_ID = 'github-credentials' // This is the ID of the credentials you created
+        CREDENTIALS_ID = 'github-credentials' // This is the ID of the credentials you created for GitHub
     }
 
     stages {
@@ -17,6 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Build the Docker image for the app
                     powershell 'docker build -t mind-reader .'
                 }
             }
@@ -34,7 +35,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    powershell 'docker run -d -p 8081:3000 mind-reader'
+                    // Run the Docker container, exposing port 3000 inside the container to 8080 on the host
+                    powershell 'docker run -d -p 8080:3000 mind-reader'
                 }
             }
         }
