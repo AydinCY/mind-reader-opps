@@ -35,8 +35,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Run the Docker container, exposing port 3000 inside the container to 8080 on the host
-                    powershell 'docker run -d -p 8080:3000 mind-reader'
+                    // Run the Docker container, exposing port 3000 inside the container to 8081 on the host
+                    powershell 'docker run -d -p 8081:3000 mind-reader'
                 }
             }
         }
