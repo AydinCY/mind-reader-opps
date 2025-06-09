@@ -2,14 +2,14 @@ pipeline {
     agent any
 
     environment {
-        REPO_URL = 'https://github.com/AydinCY/mind-reader.git'  // Your main repo URL
-        CREDENTIALS_ID = 'github-credentials' // This is the ID of the credentials you created for GitHub
+        REPO_URL         = 'https://github.com/AydinCY/mind-reader.git'
+        CREDENTIALS_ID   = 'github-credentials'
+        EMAIL_RECIPIENTS = 'a.yigittekin.369@studms.ug.edu.pl'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clone the mind-reader repository using the configured credentials
                 git branch: 'main', url: "${REPO_URL}", credentialsId: "${CREDENTIALS_ID}"
             }
         }
@@ -17,7 +17,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image for the app
                     powershell 'docker build -t mind-reader .'
                 }
             }
@@ -26,7 +25,6 @@ pipeline {
         stage('Run Tests') {
             steps {
                 script {
-                    // Optional: You can add tests here (e.g., running unit tests, static checks)
                     echo 'Running tests...'
                 }
             }
@@ -35,7 +33,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Run the Docker container, exposing port 3000 inside the container to 8082 on the host
                     powershell 'docker run -d -p 8082:3000 mind-reader'
                 }
             }
@@ -45,9 +42,27 @@ pipeline {
     post {
         success {
             echo 'Deployment was successful!'
+            // send a success email
+            emailext (
+              to:      "${EMAIL_RECIPIENTS}",
+              subject: "SUCCESS: Job '${env.JOB_NAME} [#${env.BUILD_NUMBER}]'",
+              body:    """
+                      <p>Good news! The build ${env.JOB_NAME} #${env.BUILD_NUMBER} succeeded.</p>
+                      <p>See details at: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                      """
+            )
         }
         failure {
             echo 'Deployment failed.'
+            // send a failure email
+            emailext (
+              to:      "${EMAIL_RECIPIENTS}",
+              subject: "FAILURE: Job '${env.JOB_NAME} [#${env.BUILD_NUMBER}]'",
+              body:    """
+                      <p>Oops! The build ${env.JOB_NAME} #${env.BUILD_NUMBER} failed.</p>
+                      <p>Check console output at: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>
+                      """
+            )
         }
     }
 }
