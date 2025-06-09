@@ -4,7 +4,7 @@ pipeline {
     environment {
         REPO_URL         = 'https://github.com/AydinCY/mind-reader.git'
         CREDENTIALS_ID   = 'github-credentials'
-        EMAIL_RECIPIENTS = 'a.yigittekin.369@studms.ug.edu.pl'
+        EMAIL_RECIPIENTS = 'aydincem86@gmail.com'
     }
 
     stages {
